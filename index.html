@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INEVITABLE GAME</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            background-color: #050505;
+            color: #ffffff;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        .screen {
+            display: none;
+            text-align: center;
+            max-width: 600px;
+            padding: 30px;
+            animation: fadeIn 1s ease-in-out;
+        }
+        .active { display: block; }
+        
+        /* Screen 1: Welcome */
+        #welcome-screen h1 {
+            font-size: 3rem;
+            color: #00ffcc;
+            text-shadow: 0 0 20px #00ffcc;
+            letter-spacing: 5px;
+        }
+        
+        /* Screen 2: Warning */
+        #warning-screen { border: 2px solid #ff0000; box-shadow: 0 0 30px #ff0000; }
+        .warning-icon {
+            font-size: 5rem;
+            color: #ff0000;
+            animation: blink 0.8s infinite;
+        }
+        #warning-screen h2 { color: #ff0000; font-size: 2.5rem; letter-spacing: 3px; }
+        #warning-screen p { line-height: 1.8; font-size: 1.1rem; }
+        
+        /* Screen 3: Register */
+        input[type="text"] {
+            background: #111;
+            border: 1px solid #00ffcc;
+            color: #00ffcc;
+            padding: 15px;
+            font-size: 1.2rem;
+            width: 100%;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        /* Buttons */
+        .btn {
+            background-color: #ff0000;
+            color: #fff;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 0 15px #ff0000;
+            text-transform: uppercase;
+        }
+        .btn-green { background-color: #00ffcc; box-shadow: 0 0 15px #00ffcc; color: black; }
+
+        /* Screen 4: Game Dashboard */
+        .grid-players {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 30px;
+        }
+        .player-card {
+            background: #111;
+            border: 1px dashed #555;
+            padding: 10px;
+            border-radius: 8px;
+            opacity: 0.3;
+            transition: all 0.5s ease;
+        }
+        .player-card.joined {
+            border: 2px solid #00ffcc;
+            box-shadow: 0 0 15px #00ffcc;
+            opacity: 1;
+            animation: popUp 0.5s ease-in-out;
+        }
+        .avatar { font-size: 3rem; }
+        .timer-box { color: #ffcc00; font-size: 1.2rem; margin-top: 15px; }
+
+        /* Animations */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+        @keyframes popUp { 0% { transform: scale(0.5); } 100% { transform: scale(1); } }
+    </style>
+</head>
+<body>
+
+    <!-- SCREEN 1: WELCOME -->
+    <div id="welcome-screen" class="screen active">
+        <h1>WELCOME<br>INEVITABLE-GAME</h1>
+        <p>Inapakia mfumo wa ulimwengu usioepukika...</p>
+        <button class="btn btn-green" onclick="nextScreen('welcome-screen', 'warning-screen')">INGIA</button>
+    </div>
+
+    <!-- SCREEN 2: WARNING (KWA KISWAHILI) -->
+    <div id="warning-screen" class="screen">
+        <div class="warning-icon">⚠</div>
+        <h2>ONYO LA HATARI</h2>
+        <p><strong>SOMA KWA MAKINI KABLA YA KUENDELEA:</strong></p>
+        <p>Mchezo huu sio wa kawaida. Ukibonyeza kukubali, unaruhusu mfumo wa INEVITABLE kuunganisha maisha yako ya nje ya game na maisha ya ndani ya game.</p>
+        <p>Kila jeraha, hofu, au kifo kitakachotokea ndani ya game, kitatokea kwenye ulimwengu wa kweli. Hakuna kitufe cha kuacha (Quit). Je, uko tayari kuhatarisha maisha yako?</p>
+        <button class="btn" onclick="nextScreen('warning-screen', 'register-screen')">NIMEKUBALI / PROCEED</button>
+    </div>
+
+    <!-- SCREEN 3: REGISTRATION -->
+    <div id="register-screen" class="screen">
+        <h2>JISAJILI KWENYE MFUMO</h2>
+        <p>Weka jina lako la ushujaa ili mfumo ukutambue:</p>
+        <input type="text" id="username" placeholder="Andika Jina Lako Hapa..." autocomplete="off">
+        <button class="btn btn-green" onclick="startTheGame()">ANZA KUCHEZA</button>
+    </div>
+
+    <!-- SCREEN 4: GAME DASHBOARD (MAISHA REALITY SHOT) -->
+    <div id="game-screen" class="screen" style="max-width: 800px;">
+        <h2 style="color: #00ffcc; text-shadow: 0 0 10px #00ffcc;">INEVITABLE LIVE SYSTEM</h2>
+        <p>Mfumo unaunganisha wachezaji 7 wa mtaani. Mkurugenzi (Director) yuko Live eneo la tukio...</p>
+        
+        <div class="timer-box" id="timer-msg">Inasubiri wachezaji wajisajili...</div>
+
+        <!-- Wachezaji 7 na Katuni zao (Zitafunguka moja baada ya nyingine kila baada ya sekunde 30) -->
+        <div class="grid-players">
+            <div class="player-card" id="p1">
+                <div class="avatar">🥷</div>
+                <div class="p-name" id="p1-name">Wewe</div>
+                <div style="color: #ff3333;">❤️❤️❤️</div>
+            </div>
+            <div class="player-card" id="p2">
+                <div class="avatar">👨‍</div>
+                <div class="p-name">Mchezaji 2</div>
+                <div style="color: #ff3333;">❤️❤️❤️</div>
+            </div>
+            <div class="player-card" id="p3">
+                <div class="avatar">🧙‍♂️</div>
+                <div class="p-name">Mchezaji 3</div>
+                <div style="color: #ff3333;">❤️❤️❤️</div>
+            </div>
+            <div class="player-card" id="p4">
+                <div class="avatar">🧛‍♂️</div>
+                <div class="p-name">Mchezaji 4</div>
+                <div style="color: #ff3333;">❤️❤️❤️</div>
+            </div>
+            <div class="player-card" id="p5">
+                <div class="avatar">🤖</div>
+                <div class="p-name">Mchezaji 5</div>
+                <div style="color: #ff3333;">❤️❤️❤️</div>
+            </div>
+            <div class="player-card" id="p6">
+                <div class="avatar">🦁</div>
+                <div class="p-name">Mchezaji 6</div>
+                <div style="color: #ff3333;">❤️❤️❤️</div>
+            </div>
+            <div class="player-card" id="p7">
+                <div class="avatar">💀</div>
+                <div class="p-name">Mchezaji 7</div>
+                <div style="color: #ff3333;">❤️❤️❤️</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Kazi ya kubadili screen
+        function nextScreen(currentId, nextId) {
+            document.getElementById(currentId).classList.remove('active');
+            document.getElementById(nextId).classList.add('active');
+        }
+
+        // Kazi ya kuanza mchezo na kuanzisha Timer ya Katuni
+        function startTheGame() {
+            var name = document.getElementById('username').value;
+            if(name.trim() === "") {
+                alert("Tafadhali andika jina lako kwanza!");
+                return;
+            }
+            
+            // Weka jina la mchezaji wa kwanza
+            document.getElementById('p1-name').innerText = name;
+            
+            // Nenda kwenye game dashboard
+            nextScreen('register-screen', 'game-screen');
+            
+            // Washa mchezaji wa kwanza mara moja
+            document.getElementById('p1').classList.add('joined');
+            
+            let currentPlayerCount = 2;
+            let totalPlayers = 7;
+            let secondsLeft = 30;
+            
+            // Mfumo wa kupandisha katuni kila baada ya sekunde 30
+            let countdown = setInterval(function() {
+                secondsLeft--;
+                document.getElementById('timer-msg').innerText = "Katuni/Mchezaji anafuata anajiunga baada ya sekunde: " + secondsLeft;
+                
+                if (secondsLeft <= 0) {
+                    if (currentPlayerCount <= totalPlayers) {
+                        // Pandisha katuni inayofuata
+                        document.getElementById('p' + currentPlayerCount).classList.add('joined');
+                        currentPlayerCount++;
+                        secondsLeft = 30; // Rudisha sekunde 30
+                    } else {
+                        document.getElementById('timer-msg').innerText = "Wachezaji wote 7 wameingia! MAJANGA YAMEANZA RASMI!";
+                        clearInterval(countdown);
+                    }
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
