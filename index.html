@@ -11,7 +11,7 @@
 
     /* SPLASH + WARNING FULLSCREEN */
     #splash, #warning { position: fixed; top:0; left:0; width:100vw; height:100vh; background:#000; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:999; }
-    #splash img { width: 100vw; height: 100vh; object-fit: cover; animation: fadeIn 2s; } /* IMEJAA SCREEN NZIMA */
+    #splash img { width: 100vw; height: 100vh; object-fit: cover; animation: fadeIn 2s; }
     #warning { display:none; background: rgba(0,0,0,0.95); }
     #warning h1 { color: red; font-size: 50px; animation: blink 1s infinite; }
     #warning p { color: #fff; font-size: 20px; margin-top: 20px; max-width: 700px; line-height: 1.5; }
@@ -36,20 +36,24 @@
         display: flex; flex-direction: column; align-items: center; justify-content: center;
         font-size: 14px; position: relative;
     }
-    .player-avatar { font-size: 40px; margin-bottom: 10px; } /* CARTOON ICON */
+    .player-avatar { font-size: 40px; margin-bottom: 10px; }
     .player-card.waiting { border-color: #333; color: #444; }
     .player-card.active-sync { /* Wakati inahesabu */
         border-color: #00ffff; box-shadow: 0 0 30px #00ffff; 
         background: #001111; color: #00ffff; transform: scale(1.1);
     }
-    .player-card.synced { /* Ikiisha sync - NYEKUNDU */
+    .player-card.in-game { /* Ikiisha sync - JEKUNDU */
         border-color: #ff0000; box-shadow: 0 0 25px #ff0000; 
         background: #1a0000; color: #ff0000;
     }
     .player-card.eliminated { /* Ikiuliwa */
         opacity: 0.1; filter: grayscale(100%); 
-        border-color: #555; background: #000; color: #555;
-        text-decoration: line-through;
+        border-color: #111; background: #000; color: #111;
+    }
+    .player-card.winner { /* MSHINDI */
+        border-color: #ffd700; box-shadow: 0 0 40px #ffd700; 
+        background: #1a1a00; color: #ffd700; transform: scale(1.15);
+        animation: blink 1s infinite;
     }
     .sync-timer { position: absolute; bottom: 10px; font-size: 12px; color: yellow; }
 
@@ -112,6 +116,7 @@
 let playersData = [];
 let engineInterval;
 let eliminationInterval;
+const WINNERS = [1, 3]; // MSHINDI WA 1 NA WA 3
 
 window.onload = function() {
     loadSavedPlayers();
@@ -169,8 +174,9 @@ function startOfficialEngine() {
 
         if (secondsLeft < 0) {
             document.getElementById('p' + activePlayer).classList.remove('active-sync');
-            document.getElementById('p' + activePlayer).classList.add('synced'); // SASA NI NYEKUNDU
-            document.getElementById('t' + activePlayer).innerText = "SYNCED";
+            document.getElementById('p' + activePlayer).classList.add('in-game'); // INAGEUKA JEKUNDU
+            document.getElementById('p' + activePlayer + '-title').innerText = ""; // JINA LINAPOTEA
+            document.getElementById('t' + activePlayer).innerText = "IN GAME";
 
             activePlayer++;
             secondsLeft = 15;
@@ -188,35 +194,49 @@ function showGameStarted() {
     nextScreen('game-screen', 'start-screen');
     setTimeout(() => {
         document.getElementById('start-screen').style.display = 'none';
-        startAutoElimination(); // ANZA KUAUA KIOTOMATIKI
+        startAutoElimination(); // ANZA KUA KIOTOMATIKI
     }, 3000);
 }
 
-// 4. AUTO ELIMINATION - HAKUNA KUBOFYA
+// 4. AUTO ELIMINATION
 function startAutoElimination() {
     document.getElementById('game-screen').style.display = 'block';
-    document.getElementById('timer-msg').innerText = "ELIMINATION PROTOCOL ACTIVE. WATAZAMA...";
+    document.getElementById('timer-msg').innerText = "ELIMINATION PROTOCOL ACTIVE...";
     document.getElementById('timer-msg').style.color = "#ff0000";
     document.getElementById('timer-msg').style.animation = "blink 0.5s infinite";
     
     let playersLeft = [1,2,3,4,5,6,7];
     eliminationInterval = setInterval(() => {
-        if(playersLeft.length <= 1) {
+        // Toa washindi kwenye list ya kuliwa
+        let candidates = playersLeft.filter(p => !WINNERS.includes(p));
+        
+        if(candidates.length <= 0) {
             clearInterval(eliminationInterval);
-            document.getElementById('timer-msg').innerText = "GAME OVER. WINNER: " + playersData[playersLeft[0]-1].toUpperCase();
+            declareWinners();
             return;
         }
-        let randomIndex = Math.floor(Math.random() * playersLeft.length);
-        let target = playersLeft.splice(randomIndex, 1)[0];
+        let randomIndex = Math.floor(Math.random() * candidates.length);
+        let target = candidates[randomIndex];
+        playersLeft = playersLeft.filter(p => p !== target);
         eliminatePlayer(target);
-    }, 3000); // Kila sekunde 3 anauliwa mmoja
+    }, 2500); // Kila sek 2.5 anauliwa mmoja
 }
 
 function eliminatePlayer(playerIndex) {
     const playerEl = document.getElementById('p' + playerIndex);
-    playerEl.classList.remove('synced');
+    playerEl.classList.remove('in-game');
     playerEl.classList.add('eliminated');
     document.getElementById('timer-msg').innerText = `ELIMINATED: ${playersData[playerIndex-1].toUpperCase()}`;
+}
+
+function declareWinners() {
+    document.getElementById('timer-msg').innerText = "GAME OVER. WINNERS IDENTIFIED.";
+    WINNERS.forEach(winnerIndex => {
+        document.getElementById('p' + winnerIndex).classList.remove('in-game');
+        document.getElementById('p' + winnerIndex).classList.add('winner');
+        document.getElementById('p' + winnerIndex + '-title').innerText = playersData[winnerIndex-1].toUpperCase(); // JINA LINARUDI
+        document.getElementById('t' + winnerIndex).innerText = "WINNER";
+    });
 }
 </script>
 
