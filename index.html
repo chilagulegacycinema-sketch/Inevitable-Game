@@ -23,7 +23,7 @@
    .input-grid { display:grid; grid-template-columns: repeat(2, 1fr); gap:15px; max-width:650px; margin:20px auto; padding:20px; }
     input { padding: 14px; background: #200000; border: 3px solid #ff0000; color: #ff0000; font-size: 16px; border-radius: 8px; font-family: 'Orbitron'; }
     input::placeholder { color: #ff3333; }
-
+    
    .btn-start { padding: 18px 40px; background: #ff0000; color: #000; border: none; cursor: pointer; font-size: 20px; margin-top: 20px; font-weight: 900; border-radius: 10px; }
 
    .players-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; max-width: 900px; margin: 30px auto; padding:20px; }
@@ -40,20 +40,20 @@
    .final-text { font-size: 18px; font-weight: 900; display: none; position: absolute; bottom: 10px; z-index: 3; }
 
    .active-sync { border-color: #00ffff!important; background: #002222!important; color: #00ffff!important; animation: pulse 1s infinite; }
-   .active-sync.player-avatar { color: #00ffff!important; }
+   .active-sync .player-avatar { color: #00ffff!important; }
 
    .in-game { background: #ff0000!important; animation: pulse 1s infinite; transform: scale(1.05); }
-   .in-game.player-avatar,.in-game.player-name,.in-game.player-status { display: none; } /* BOX TUPU */
-
+   .in-game * { display: none!important; } /* HAPA NDO SIRI: KILA KITU KINAFICHWA */
+    
    .eliminated { background: #4d0000!important; border-color: #4d0000!important; }
-   .eliminated.player-avatar,.eliminated.player-name,.eliminated.player-status { display: none; }
+   .eliminated * { display: none!important; }
 
    .winner-final { background: #ffd700!important; border-color: #ffd700!important; animation: blink 0.8s infinite; }
-   .winner-final.final-mark { display: block; color: #000; }
-   .winner-final.final-text { display: block; color: #000; }
+   .winner-final .final-mark { display: block; color: #000; }
+   .winner-final .final-text { display: block; color: #000; }
 
    .loser-final { background: #4d0000!important; border-color: #4d0000!important; animation: blink 0.8s infinite; }
-   .loser-final.final-mark { display: block; color: #ff0000; }
+   .loser-final .final-mark { display: block; color: #ff0000; }
 
     #timer-msg { color: #ff0000; font-size: 22px; margin: 20px 0; min-height: 30px; }
     #start-screen { display:none; position: fixed; top:0; left:0; width:100%; height:100%; background:#000; align-items:center; justify-content:center; z-index: 100; }
@@ -133,7 +133,7 @@ function startEngine() {
         secondsLeft--;
         if (secondsLeft < 0) {
             document.getElementById('p' + activePlayer).classList.remove('active-sync');
-            document.getElementById('p' + activePlayer).classList.add('in-game'); // BOX TUPU NYEKUNDU
+            document.getElementById('p' + activePlayer).classList.add('in-game'); // HAPA KILA KITU KINAPOTEA
             activePlayer++;
             secondsLeft = 15;
             if (activePlayer > 7) { clearInterval(engineInterval); showGameStarted(); }
@@ -165,11 +165,11 @@ function finalResult() {
     document.getElementById('timer-msg').innerText = "GAME OVER";
     for(let i=1; i<=7; i++) {
         if(WINNERS.includes(i)) {
-            document.getElementById('p' + i).classList.remove('in-game');
-            document.getElementById('p' + i).classList.add('winner-final'); // WASHINDI 2 = DHABU + WINNER
+            document.getElementById('p' + i).classList.remove('in-game', 'eliminated');
+            document.getElementById('p' + i).classList.add('winner-final'); // 2 WASHINDI = DHAHABU + WINNER
         } else {
-            document.getElementById('p' + i).classList.remove('in-game');
-            document.getElementById('p' + i).classList.add('loser-final'); // WALIOKUFU 5 = NYEKUNDU YA GIZA + ❌️
+            document.getElementById('p' + i).classList.remove('in-game', 'eliminated');
+            document.getElementById('p' + i).classList.add('loser-final'); // 5 WALIOKUFA = NYEKUNDU YA GIZA + ❌️
         }
     }
 }
