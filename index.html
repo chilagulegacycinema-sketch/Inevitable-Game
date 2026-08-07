@@ -7,21 +7,15 @@
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap');
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { 
-        background: #000; 
-        color: #fff; 
-        font-family: 'Orbitron', sans-serif; 
-        text-align: center; 
-        overflow: hidden;
-    }
+    body { background: #000; color: #fff; font-family: 'Orbitron', sans-serif; text-align: center; overflow: hidden; }
 
-    /* SPLASH + WARNING */
-    #splash, #warning { position: fixed; top:0; left:0; width:100%; height:100%; background:#000; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:999; }
-    #splash img { width: 400px; max-width: 90%; animation: fadeIn 2s; }
+    /* SPLASH + WARNING FULLSCREEN */
+    #splash, #warning { position: fixed; top:0; left:0; width:100vw; height:100vh; background:#000; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:999; }
+    #splash img { width: 100vw; height: 100vh; object-fit: cover; animation: fadeIn 2s; } /* IMEJAA SCREEN NZIMA */
     #warning { display:none; background: rgba(0,0,0,0.95); }
-    #warning h1 { color: red; font-size: 40px; animation: blink 1s infinite; }
-    #warning p { color: #fff; font-size: 18px; margin-top: 20px; max-width: 600px; }
-    @keyframes fadeIn { from {opacity:0; transform:scale(0.8);} to {opacity:1; transform:scale(1);} }
+    #warning h1 { color: red; font-size: 50px; animation: blink 1s infinite; }
+    #warning p { color: #fff; font-size: 20px; margin-top: 20px; max-width: 700px; line-height: 1.5; }
+    @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
     @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
 
     h1.main-title { color: #ff0000; font-size: 38px; margin: 20px 0; text-shadow: 0 0 15px red; letter-spacing: 3px;}
@@ -29,48 +23,37 @@
 
     #register-screen, #game-screen, #start-screen { padding: 20px; }
     .input-grid { display:grid; grid-template-columns: repeat(2, 1fr); gap:15px; max-width:650px; margin:20px auto; }
-    input { 
-        padding: 14px; background: #111; border: 2px solid #333; color: #fff; 
-        font-size: 16px; border-radius: 8px; font-family: 'Orbitron';
-        transition: 0.3s;
-    }
+    input { padding: 14px; background: #111; border: 2px solid #333; color: #fff; font-size: 16px; border-radius: 8px; font-family: 'Orbitron'; transition: 0.3s; }
     input:focus { border-color: red; box-shadow: 0 0 10px red; outline:none; }
     
-    .btn-start { 
-        padding: 18px 40px; background: linear-gradient(45deg, #ff0000, #aa0000); 
-        color: #fff; border: none; cursor: pointer; font-size: 20px;
-        margin-top: 20px; font-weight: 900; border-radius: 10px; letter-spacing: 2px;
-        transition: 0.3s;
-    }
+    .btn-start { padding: 18px 40px; background: linear-gradient(45deg, #ff0000, #aa0000); color: #fff; border: none; cursor: pointer; font-size: 20px; margin-top: 20px; font-weight: 900; border-radius: 10px; letter-spacing: 2px; transition: 0.3s; }
     .btn-start:hover { transform: scale(1.05); box-shadow: 0 0 25px red; }
 
-    .players-grid { 
-        display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
-        max-width: 900px; margin: 30px auto; 
-    }
+    .players-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; max-width: 900px; margin: 30px auto; }
     .player-card {
-        background: #0a0a0a; border: 2px solid #222; padding: 20px;
-        transition: 0.5s; border-radius: 12px; min-height: 120px;
-        display: flex; align-items: center; justify-content: center;
-        font-size: 16px; position: relative;
+        background: #0a0a0a; border: 2px solid #222; padding: 15px;
+        transition: 0.5s; border-radius: 12px; min-height: 160px;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        font-size: 14px; position: relative;
     }
+    .player-avatar { font-size: 40px; margin-bottom: 10px; } /* CARTOON ICON */
     .player-card.waiting { border-color: #333; color: #444; }
     .player-card.active-sync { /* Wakati inahesabu */
         border-color: #00ffff; box-shadow: 0 0 30px #00ffff; 
         background: #001111; color: #00ffff; transform: scale(1.1);
     }
-    .player-card.joined { /* Imeisha sync */
-        border-color: #00ff00; box-shadow: 0 0 20px #00ff00; 
-        background: #001100; color: #00ff00;
+    .player-card.synced { /* Ikiisha sync - NYEKUNDU */
+        border-color: #ff0000; box-shadow: 0 0 25px #ff0000; 
+        background: #1a0000; color: #ff0000;
     }
-    .player-card.shot { 
-        opacity: 0.1; filter: grayscale(100%); pointer-events: none; 
-        border-color: #ff0000; background: #1a0000; color: #ff0000;
+    .player-card.eliminated { /* Ikiuliwa */
+        opacity: 0.1; filter: grayscale(100%); 
+        border-color: #555; background: #000; color: #555;
         text-decoration: line-through;
     }
-    .sync-timer { position: absolute; bottom: 10px; font-size: 12px; }
+    .sync-timer { position: absolute; bottom: 10px; font-size: 12px; color: yellow; }
 
-    #timer-msg { color: #ffff00; font-size: 20px; margin: 20px 0; min-height: 30px; letter-spacing: 1px; }
+    #timer-msg { color: #ffff00; font-size: 22px; margin: 20px 0; min-height: 30px; letter-spacing: 1px; }
     
     /* GAME STARTED SCREEN */
     #start-screen { display:none; position: fixed; top:0; left:0; width:100%; height:100%; background:#000; align-items:center; justify-content:center; z-index: 100; }
@@ -79,7 +62,7 @@
 </head>
 <body>
 
-<!-- 1. SPLASH LOGO -->
+<!-- 1. SPLASH LOGO FULLSCREEN -->
 <div id="splash">
     <img src="https://i.postimg.cc/RhzL9BcJ/inevetable.jpg" alt="INEVITABLE-GAME LOGO">
 </div>
@@ -87,7 +70,7 @@
 <!-- 2. WARNING -->
 <div id="warning">
     <h1>⚠️ WARNING ⚠️</h1>
-    <p>MCHEZO UNAOENDELEA NI WA HATARI KUBWA. MTU AKIFA KWENYE GAME HII, AMEFA KWELI KWELI. KWA KUBONJEZA "NINAENDELEA" UNAKUBALI MASHARTI HAYO.</p>
+    <p>MCHEZO UNAOENDELEA NI WA HATARI KUBWA. MTU AKIFA KWENYE GAME HII, AMEFA KWELI KWELI. HUU SI MCHEZO WA KUCHEZEA. KWA KUBONJEZA "NINAENDELEA" UNAKUBALI MASHARTI HAYO.</p>
 </div>
 
 <!-- 3. REGISTER -->
@@ -106,17 +89,17 @@
     <button class="btn-start" onclick="registerPlayers()">INITIALIZE SYSTEM</button>
 </div>
 
-<!-- 4. GAME SYNC -->
+<!-- 4. GAME SYNC & ACTION -->
 <div id="game-screen" style="display:none;">
     <h2 id="timer-msg">BOOTING INEVITABLE PROTOCOL...</h2>
     <div class="players-grid">
-        <div class="player-card waiting" id="p1"><span id="p1-title">WAITING</span><div class="sync-timer" id="t1"></div></div>
-        <div class="player-card waiting" id="p2"><span id="p2-title">WAITING</span><div class="sync-timer" id="t2"></div></div>
-        <div class="player-card waiting" id="p3"><span id="p3-title">WAITING</span><div class="sync-timer" id="t3"></div></div>
-        <div class="player-card waiting" id="p4"><span id="p4-title">WAITING</span><div class="sync-timer" id="t4"></div></div>
-        <div class="player-card waiting" id="p5"><span id="p5-title">WAITING</span><div class="sync-timer" id="t5"></div></div>
-        <div class="player-card waiting" id="p6"><span id="p6-title">WAITING</span><div class="sync-timer" id="t6"></div></div>
-        <div class="player-card waiting" id="p7"><span id="p7-title">WAITING</span><div class="sync-timer" id="t7"></div></div>
+        <div class="player-card waiting" id="p1"><div class="player-avatar">👤</div><span id="p1-title">WAITING</span><div class="sync-timer" id="t1"></div></div>
+        <div class="player-card waiting" id="p2"><div class="player-avatar">👤</div><span id="p2-title">WAITING</span><div class="sync-timer" id="t2"></div></div>
+        <div class="player-card waiting" id="p3"><div class="player-avatar">👤</div><span id="p3-title">WAITING</span><div class="sync-timer" id="t3"></div></div>
+        <div class="player-card waiting" id="p4"><div class="player-avatar">👤</div><span id="p4-title">WAITING</span><div class="sync-timer" id="t4"></div></div>
+        <div class="player-card waiting" id="p5"><div class="player-avatar">👤</div><span id="p5-title">WAITING</span><div class="sync-timer" id="t5"></div></div>
+        <div class="player-card waiting" id="p6"><div class="player-avatar">👤</div><span id="p6-title">WAITING</span><div class="sync-timer" id="t6"></div></div>
+        <div class="player-card waiting" id="p7"><div class="player-avatar">👤</div><span id="p7-title">WAITING</span><div class="sync-timer" id="t7"></div></div>
     </div>
 </div>
 
@@ -128,15 +111,15 @@
 <script>
 let playersData = [];
 let engineInterval;
+let eliminationInterval;
 
 window.onload = function() {
     loadSavedPlayers();
-    setTimeout(() => { // Logo sek 3
+    setTimeout(() => {
         document.getElementById('splash').style.display = 'none';
-        document.getElementById('warning').style.display = 'flex'; // Onyesho onyo
+        document.getElementById('warning').style.display = 'flex';
     }, 3000);
-
-    setTimeout(() => { // Onyo lisekae sek 5
+    setTimeout(() => {
         document.getElementById('warning').style.display = 'none';
         document.getElementById('register-screen').style.display = 'block';
     }, 8000);
@@ -170,33 +153,31 @@ function registerPlayers() {
         return;
     }
     nextScreen('register-screen', 'game-screen');
-    startOfficialEngine(); // Anza kuhesabu
+    startOfficialEngine();
 }
 
-// 2. ENGINE MPYA YA SEKUNDE 15 KILA MTU
+// 2. ENGINE YA SEKUNDE 15 KILA MTU
 function startOfficialEngine() {
     let activePlayer = 1;
     let secondsLeft = 15;
 
     engineInterval = setInterval(function() {
-        // Washa player anaye sync
         document.getElementById('p' + activePlayer).classList.add('active-sync');
         document.getElementById('timer-msg').innerText = `SYNCING PLAYER ${activePlayer}: ${playersData[activePlayer-1].toUpperCase()}... ${secondsLeft}s`;
         document.getElementById('t' + activePlayer).innerText = secondsLeft + "s";
         secondsLeft--;
 
         if (secondsLeft < 0) {
-            // Maliza huyu mchezaji
             document.getElementById('p' + activePlayer).classList.remove('active-sync');
-            document.getElementById('p' + activePlayer).classList.add('joined');
+            document.getElementById('p' + activePlayer).classList.add('synced'); // SASA NI NYEKUNDU
             document.getElementById('t' + activePlayer).innerText = "SYNCED";
 
             activePlayer++;
-            secondsLeft = 15; // Reset kwa anayefuata
+            secondsLeft = 15;
 
             if (activePlayer > 7) {
                 clearInterval(engineInterval);
-                showGameStarted(); // Wote wameshaisha
+                showGameStarted();
             }
         }
     }, 1000);
@@ -207,36 +188,35 @@ function showGameStarted() {
     nextScreen('game-screen', 'start-screen');
     setTimeout(() => {
         document.getElementById('start-screen').style.display = 'none';
-        startActionPhase(); // Rudi kwenye game screen na uanze kushot
-    }, 3000); // GAME STARTED isekae sek 3
+        startAutoElimination(); // ANZA KUAUA KIOTOMATIKI
+    }, 3000);
 }
 
-// 4. ACTION PHASE
-function startActionPhase() {
+// 4. AUTO ELIMINATION - HAKUNA KUBOFYA
+function startAutoElimination() {
     document.getElementById('game-screen').style.display = 'block';
-    document.getElementById('timer-msg').innerText = "ELIMINATION PROTOCOL ACTIVE. CHAGUA TARGET.";
+    document.getElementById('timer-msg').innerText = "ELIMINATION PROTOCOL ACTIVE. WATAZAMA...";
     document.getElementById('timer-msg').style.color = "#ff0000";
     document.getElementById('timer-msg').style.animation = "blink 0.5s infinite";
-    enableShooting();
-}
-
-// 5. KUSHOT
-function enableShooting() {
-    for (let i = 1; i <= 7; i++) {
-        const playerEl = document.getElementById('p' + i);
-        playerEl.style.cursor = "crosshair";
-        playerEl.onclick = function() {
-            shootArtist(i, playersData[i-1]);
+    
+    let playersLeft = [1,2,3,4,5,6,7];
+    eliminationInterval = setInterval(() => {
+        if(playersLeft.length <= 1) {
+            clearInterval(eliminationInterval);
+            document.getElementById('timer-msg').innerText = "GAME OVER. WINNER: " + playersData[playersLeft[0]-1].toUpperCase();
+            return;
         }
-    }
+        let randomIndex = Math.floor(Math.random() * playersLeft.length);
+        let target = playersLeft.splice(randomIndex, 1)[0];
+        eliminatePlayer(target);
+    }, 3000); // Kila sekunde 3 anauliwa mmoja
 }
 
-function shootArtist(playerIndex, playerName) {
+function eliminatePlayer(playerIndex) {
     const playerEl = document.getElementById('p' + playerIndex);
-    if (playerEl.classList.contains('shot')) return;
-    playerEl.classList.add('shot');
-    alert("ELIMINATED: " + playerName.toUpperCase());
-    document.getElementById('timer-msg').innerText = `TARGET ${playerName.toUpperCase()} DOWN!`;
+    playerEl.classList.remove('synced');
+    playerEl.classList.add('eliminated');
+    document.getElementById('timer-msg').innerText = `ELIMINATED: ${playersData[playerIndex-1].toUpperCase()}`;
 }
 </script>
 
