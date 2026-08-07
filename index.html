@@ -3,113 +3,157 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GAME YA FILM - CHILAGU LEGACY</title>
+<title>INEVITABLE-GAME</title>
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap');
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { 
-        background: #000; 
+        background: #050505; 
         color: #fff; 
-        font-family: 'Arial Black', Arial; 
+        font-family: 'Orbitron', sans-serif; 
         text-align: center; 
-        padding: 20px;
+        overflow: hidden;
     }
-    h2 { margin-bottom: 20px; color: #ff0000; }
+
+    /* SPLASH SCREEN */
+    #splash { position: fixed; top:0; left:0; width:100%; height:100%; background:#000; display:flex; align-items:center; justify-content:center; z-index:999; }
+    #splash img { width: 400px; max-width: 90%; animation: fadeIn 2s; }
+    @keyframes fadeIn { from {opacity:0; transform:scale(0.8);} to {opacity:1; transform:scale(1);} }
+
+    h1 { color: #ff0000; font-size: 38px; margin-bottom: 10px; text-shadow: 0 0 15px red; letter-spacing: 3px;}
+    h2 { margin-bottom: 20px; color: #ccc; font-size: 16px; }
+
+    #register-screen, #game-screen { padding: 20px; }
+    .input-grid { display:grid; grid-template-columns: repeat(2, 1fr); gap:15px; max-width:650px; margin:20px auto; }
     input { 
-        display: block; 
-        margin: 10px auto; 
-        padding: 12px; 
-        width: 300px; 
+        padding: 14px; 
         background: #111; 
-        border: 2px solid #ff0000; 
+        border: 2px solid #333; 
         color: #fff; 
         font-size: 16px;
+        border-radius: 8px;
+        font-family: 'Orbitron';
+        transition: 0.3s;
     }
-    button { 
-        padding: 15px 30px; 
-        background: red; 
+    input:focus { border-color: red; box-shadow: 0 0 10px red; outline:none; }
+    
+    .btn-start { 
+        padding: 18px 40px; 
+        background: linear-gradient(45deg, #ff0000, #aa0000); 
         color: #fff; 
         border: none; 
         cursor: pointer; 
-        font-size: 18px;
+        font-size: 20px;
         margin-top: 20px;
-        font-weight: bold;
-    }
-    button:hover { background: #ff3333; }
-
-    .players { 
-        display: flex; 
-        flex-wrap: wrap; 
-        justify-content: center; 
-        margin-top: 30px; 
-        gap: 15px;
-    }
-    .player {
-        width: 140px; 
-        height: 140px; 
-        background: #1a1a1a; 
-        border: 3px solid #555; 
-        display: flex; 
-        align-items: center; 
-        justify-content: center;
-        transition: 0.4s;
-        font-size: 14px;
+        font-weight: 900;
         border-radius: 10px;
+        letter-spacing: 2px;
+        transition: 0.3s;
     }
-    .player.joined { 
+    .btn-start:hover { transform: scale(1.05); box-shadow: 0 0 25px red; }
+
+    .players-grid { 
+        display: grid; 
+        grid-template-columns: repeat(4, 1fr); 
+        gap: 20px;
+        max-width: 900px;
+        margin: 30px auto; 
+    }
+    .player-card {
+        background: #0a0a0a; 
+        border: 2px solid #222; 
+        padding: 20px;
+        transition: 0.4s;
+        border-radius: 12px;
+        min-height: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+    }
+    .player-card.waiting { border-color: #444; color: #555; }
+    .player-card.joined { 
         border-color: #00ff00; 
-        box-shadow: 0 0 20px #00ff00; 
-        background: #003300;
+        box-shadow: 0 0 25px #00ff00; 
+        background: #001100;
+        color: #00ff00;
+        transform: scale(1.05);
     }
-    .player.shot { 
+    .player-card.shot { 
         opacity: 0.2; 
         filter: grayscale(100%); 
         pointer-events: none; 
         border-color: #ff0000;
-        background: #330000;
+        background: #1a0000;
+        color: #ff0000;
+        text-decoration: line-through;
     }
 
     #timer-msg { 
-        color: yellow; 
-        font-size: 22px; 
-        margin-bottom: 20px;
+        color: #ffff00; 
+        font-size: 20px; 
+        margin: 20px 0;
         min-height: 30px;
+        letter-spacing: 1px;
     }
-    @keyframes blink {
-     0% { opacity: 1; }
-     50% { opacity: 0.2; }
-     100% { opacity: 1; }
-    }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 </style>
 </head>
 <body>
 
-<div id="register-screen">
-    <h2>SAJILI WACHEZAJI 7 ILI KUVUNJA SHERIA YA MCHEZO</h2>
-    <input type="text" id="p1" placeholder="Mchezaji 1">
-    <input type="text" id="p2" placeholder="Mchezaji 2">
-    <input type="text" id="p3" placeholder="Mchezaji 3">
-    <input type="text" id="p4" placeholder="Mchezaji 4">
-    <input type="text" id="p5" placeholder="Mchezaji 5">
-    <input type="text" id="p6" placeholder="Mchezaji 6">
-    <input type="text" id="p7" placeholder="Mchezaji 7">
-    <button onclick="registerPlayers()">ANZA MFUMO</button>
+<!-- 1. SPLASH SCREEN -->
+<div id="splash">
+    <img src="https://i.postimg.cc/RhzL9BcJ/inevetable.jpg" alt="INEVITABLE-GAME LOGO">
+</div>
+
+<h1>INEVITABLE-GAME</h1>
+
+<div id="register-screen" style="display:none;">
+    <h2>SHERIA: WACHEZAJI 7 LAZIMA WAJAZE ILI MFUMO UFUNGULIWE</h2>
+    <div class="input-grid">
+        <input type="text" id="p1" placeholder="OPERATIVE 01">
+        <input type="text" id="p2" placeholder="OPERATIVE 02">
+        <input type="text" id="p3" placeholder="OPERATIVE 03">
+        <input type="text" id="p4" placeholder="OPERATIVE 04">
+        <input type="text" id="p5" placeholder="OPERATIVE 05">
+        <input type="text" id="p6" placeholder="OPERATIVE 06">
+        <input type="text" id="p7" placeholder="OPERATIVE 07">
+    </div>
+    <button class="btn-start" onclick="registerPlayers()">INITIALIZE SYSTEM</button>
 </div>
 
 <div id="game-screen" style="display:none;">
-    <h2 id="timer-msg">PLEASE WAIT... SYNCING PLAYERS</h2>
-    
-    <div class="players">
-        <div class="player" id="p1"><span id="p1-title">Player 1</span></div>
-        <div class="player" id="p2"><span id="p2-title">Player 2</span></div>
-        <div class="player" id="p3"><span id="p3-title">Player 3</span></div>
-        <div class="player" id="p4"><span id="p4-title">Player 4</span></div>
-        <div class="player" id="p5"><span id="p5-title">Player 5</span></div>
-        <div class="player" id="p6"><span id="p6-title">Player 6</span></div>
-        <div class="player" id="p7"><span id="p7-title">Player 7</span></div>
+    <h2 id="timer-msg">SYSTEM BOOTING...</h2>
+    <div class="players-grid">
+        <div class="player-card waiting" id="p1"><span id="p1-title">WAITING</span></div>
+        <div class="player-card waiting" id="p2"><span id="p2-title">WAITING</span></div>
+        <div class="player-card waiting" id="p3"><span id="p3-title">WAITING</span></div>
+        <div class="player-card waiting" id="p4"><span id="p4-title">WAITING</span></div>
+        <div class="player-card waiting" id="p5"><span id="p5-title">WAITING</span></div>
+        <div class="player-card waiting" id="p6"><span id="p6-title">WAITING</span></div>
+        <div class="player-card waiting" id="p7"><span id="p7-title">WAITING</span></div>
     </div>
 </div>
 
 <script>
+let playersData = [];
+// ONYESHA LOGO KWANZA
+window.onload = function() {
+    loadSavedPlayers(); // pakua majina yaliyosave
+    setTimeout(() => {
+        document.getElementById('splash').style.display = 'none';
+        document.getElementById('register-screen').style.display = 'block';
+    }, 3000); // logo isekae sek 3
+}
+
+// PAKUA MAJINA KUTOKA KWA PC
+function loadSavedPlayers() {
+    for(let i=1; i<=7; i++) {
+        let savedName = localStorage.getItem('inevitable_p' + i);
+        if(savedName) document.getElementById('p' + i).value = savedName;
+    }
+}
+
 // BADILI SCREEN
 function nextScreen(hideId, showId) {
     document.getElementById(hideId).style.display = "none";
@@ -118,71 +162,67 @@ function nextScreen(hideId, showId) {
 
 // 1. KUSAJILI WACHEZAJI 7
 function registerPlayers() {
-    const playersData = [];
+    playersData = [];
     let allFilled = true;
 
     for (let i = 1; i <= 7; i++) {
         const nameValue = document.getElementById('p' + i).value.trim();
+        localStorage.setItem('inevitable_p' + i, nameValue); // SAVE KILA JINA
         
         if (nameValue === "") {
             allFilled = false;
-            break;
         }
         playersData.push(nameValue);
     }
 
     if (!allFilled) {
-        alert("MFUMO UMEGOMA: Lazima wachezaji wote 7 wajaze majina ili kuvunja sheria ya mchezo!");
+        alert("MFUMO UMEGOMA: SHERIA YA MCHEZO. WACHEZAJI 7 LAZIMA WAJAZE.");
         return;
     }
 
     for (let i = 1; i <= 7; i++) {
-        document.getElementById('p' + i + '-title').innerText = playersData[i - 1];
+        document.getElementById('p' + i + '-title').innerText = playersData[i - 1].toUpperCase();
     }
 
     nextScreen('register-screen', 'game-screen');
-    document.getElementById('p1').classList.add('joined');
-    startOfficialEngine(playersData);
+    document.getElementById('p1').classList.replace('waiting', 'joined');
+    startOfficialEngine();
 }
 
-// 2. ENGINE YA KUINGIZA WACHEZAJI KWA MPANGO
-function startOfficialEngine(playersData) {
+// 2. ENGINE MPYA YA KIPROFESSIONAL
+function startOfficialEngine() {
     let activeCount = 2; // p1 tayari joined
     let total = 7;
     let secondsLeft = 30;
 
     const engineInterval = setInterval(function() {
-        secondsLeft--;
         document.getElementById('timer-msg').innerText = 
-            "PLEASE WAIT... SYNCING NEXT SESSION IN " + secondsLeft + "s";
+            `SYNCING PLAYER ${activeCount}... ${secondsLeft}s`;
+        secondsLeft--;
 
-        if (secondsLeft <= 0) {
+        if (secondsLeft < 0) {
             if (activeCount <= total) {
-                document.getElementById('p' + activeCount).classList.add('joined');
+                document.getElementById('p' + activeCount).classList.replace('waiting', 'joined');
                 activeCount++;
                 secondsLeft = 30;
             } else {
-                // WOTE WAMESHAINGIA. ANZA ACTION
                 clearInterval(engineInterval);
-                startActionPhase(playersData);
+                startActionPhase();
             }
         }
     }, 1000);
 }
 
-// 3. ACTION PHASE - HALI INABADILIKA NDANI
-function startActionPhase(playersData) {
+// 3. ACTION PHASE
+function startActionPhase() {
     document.getElementById('timer-msg').innerText = "ACTION! HALI IMEBADILIKA NDANI!";
     document.getElementById('timer-msg').style.color = "#ff0000";
-    document.getElementById('timer-msg').style.fontSize = "26px";
     document.getElementById('timer-msg').style.animation = "blink 0.5s infinite";
-
-    enableShooting(playersData);
-    console.log("ACTION STARTED. Wasanii 7 wamo ndani. Tayari kwa kushot.");
+    enableShooting();
 }
 
-// 4. MFUMO WA KUSHOT WASANII
-function enableShooting(playersData) {
+// 4. MFUMO WA KUSHOT
+function enableShooting() {
     for (let i = 1; i <= 7; i++) {
         const playerEl = document.getElementById('p' + i);
         playerEl.style.cursor = "crosshair";
@@ -195,12 +235,11 @@ function enableShooting(playersData) {
 // 5. ACTION YA KUSHOT
 function shootArtist(playerIndex, playerName) {
     const playerEl = document.getElementById('p' + playerIndex);
-    
     if (playerEl.classList.contains('shot')) return;
 
     playerEl.classList.add('shot');
-    alert("BOOM! " + playerName + " AMESHOTIWA!");
-    document.getElementById('timer-msg').innerText = playerName + " DOWN! ENDELEA KUSHOT!";
+    alert("ELIMINATION: " + playerName.toUpperCase());
+    document.getElementById('timer-msg').innerText = `TARGET ${playerName.toUpperCase()} DOWN!`;
 }
 </script>
 
