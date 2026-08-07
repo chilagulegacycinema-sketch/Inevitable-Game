@@ -20,47 +20,52 @@
     @keyframes bloodPulse { 0% {box-shadow: 0 0 20px #ff0000;} 50% {box-shadow: 0 0 60px #ff0000;} 100% {box-shadow: 0 0 20px #ff0000;} }
 
     h1.main-title { color: #ff0000; font-size: 38px; margin: 20px 0; text-shadow: 0 0 15px red; letter-spacing: 3px;}
-    h2 { margin-bottom: 20px; color: #ccc; font-size: 16px; }
+    h2 { margin-bottom: 20px; color: #ff6666; font-size: 16px; }
 
     #register-screen, #game-screen, #start-screen { padding: 20px; }
     .input-grid { display:grid; grid-template-columns: repeat(2, 1fr); gap:15px; max-width:650px; margin:20px auto; }
-    input { padding: 14px; background: #111; border: 2px solid #333; color: #fff; font-size: 16px; border-radius: 8px; font-family: 'Orbitron'; transition: 0.3s; }
-    input:focus { border-color: red; box-shadow: 0 0 10px red; outline:none; }
+    input { padding: 14px; background: #1a0000; border: 2px solid #ff0000; color: #ff0000; font-size: 16px; border-radius: 8px; font-family: 'Orbitron'; transition: 0.3s; } /* USAJILI NYEKUNDU */
+    input::placeholder { color: #aa0000; }
+    input:focus { border-color: #ff3333; box-shadow: 0 0 15px #ff0000; outline:none; background: #330000; }
     
     .btn-start { padding: 18px 40px; background: linear-gradient(45deg, #ff0000, #aa0000); color: #fff; border: none; cursor: pointer; font-size: 20px; margin-top: 20px; font-weight: 900; border-radius: 10px; letter-spacing: 2px; transition: 0.3s; }
     .btn-start:hover { transform: scale(1.05); box-shadow: 0 0 25px red; }
 
     .players-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; max-width: 900px; margin: 30px auto; }
     .player-card {
-        background: #0a0a0a; border: 2px solid #222; padding: 15px;
+        background: #1a0000; border: 2px solid #ff0000; padding: 15px; /* KUANZIA HAPA NI NYEKUNDU */
         transition: 0.5s; border-radius: 12px; min-height: 160px;
         display: flex; flex-direction: column; align-items: center; justify-content: center;
-        font-size: 14px; position: relative; overflow: hidden; /* MUHIMU KWA DAMU */
+        font-size: 14px; position: relative; overflow: hidden;
+        color: #ff0000; /* MAANDISHI NYEKUNDU */
     }
-    .player-avatar { font-size: 45px; margin-bottom: 8px; transition: 0.3s; z-index: 2; }
+    .player-avatar { font-size: 45px; margin-bottom: 8px; transition: 0.3s; z-index: 2; color: #ff0000; }
     .player-name { font-size: 14px; z-index: 2; }
     .player-status { font-size: 12px; margin-top: 5px; z-index: 2; }
-    .elimination-x { font-size: 90px; color: #000; font-weight: 900; display: none; position: absolute; z-index: 3; text-shadow: 0 0 10px #ff0000; } /* X KUBWA */
+    .elimination-x { font-size: 90px; color: #000; font-weight: 900; display: none; position: absolute; z-index: 3; text-shadow: 0 0 10px #ff0000; }
 
-    .player-card.waiting { border-color: #333; color: #444; }
+    .player-card.waiting { border-color: #ff0000; box-shadow: 0 0 10px #330000; }
     .player-card.active-sync { /* Wakati inahesabu */
         border-color: #00ffff; box-shadow: 0 0 30px #00ffff; 
         background: #001111; color: #00ffff; transform: scale(1.1);
     }
+    .player-card.active-sync .player-avatar { color: #00ffff; }
     .player-card.in-game { /* Ikiisha sync - BOX ZIMA LA DAMU */
         border-color: #ff0000; 
-        background: linear-gradient(135deg, #8b0000, #ff0000, #8b0000); /* GRADIENT YA DAMU */
+        background: linear-gradient(135deg, #8b0000, #ff0000, #8b0000); /* DAMU */
         animation: bloodPulse 1s infinite; /* INAPULIZA */
         transform: scale(1.05);
+        color: #fff;
     }
-    .player-card.in-game .player-avatar { color: #fff; filter: drop-shadow(0 0 5px #fff); } /* AVATAR NYEUPE */
+    .player-card.in-game .player-avatar { color: #fff; filter: drop-shadow(0 0 5px #fff); }
     .player-card.in-game .player-name, 
-    .player-card.in-game .player-status { display: none; } /* FICHA MAANDISHI */
+    .player-card.in-game .player-status { display: none; }
     
-    .player-card.eliminated { /* Ikiuliwa - BADO DAMU NA X */
+    .player-card.eliminated { /* Ikiuliwa - DAMU ILIYOKAUKA */
         border-color: #550000; 
-        background: #220000; /* DAMU ILIYOKAUKA */
+        background: #220000; 
         animation: none;
+        color: #550000;
     }
     .player-card.eliminated .player-avatar, 
     .player-card.eliminated .player-name,
@@ -75,7 +80,7 @@
     }
     .player-card.winner .player-avatar { color: #000; }
 
-    #timer-msg { color: #ffff00; font-size: 22px; margin: 20px 0; min-height: 30px; letter-spacing: 1px; }
+    #timer-msg { color: #ff3333; font-size: 22px; margin: 20px 0; min-height: 30px; letter-spacing: 1px; text-shadow: 0 0 10px red; }
     
     /* GAME STARTED SCREEN */
     #start-screen { display:none; position: fixed; top:0; left:0; width:100%; height:100%; background:#000; align-items:center; justify-content:center; z-index: 100; }
@@ -242,7 +247,7 @@ function startAutoElimination() {
 function eliminatePlayer(playerIndex) {
     const playerEl = document.getElementById('p' + playerIndex);
     playerEl.classList.remove('in-game');
-    playerEl.classList.add('eliminated'); // INAGEUKA DAMU ILIYOKAUKA
+    playerEl.classList.add('eliminated'); 
     document.getElementById('t' + playerIndex).innerText = "";
     document.getElementById('timer-msg').innerText = `ELIMINATED: ${playersData[playerIndex-1].toUpperCase()}`;
 }
