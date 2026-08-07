@@ -36,23 +36,27 @@
         display: flex; flex-direction: column; align-items: center; justify-content: center;
         font-size: 14px; position: relative;
     }
-    .player-avatar { font-size: 45px; margin-bottom: 8px; }
+    .player-avatar { font-size: 45px; margin-bottom: 8px; transition: 0.3s; }
     .player-name { font-size: 14px; }
     .player-status { font-size: 12px; margin-top: 5px; }
-    .elimination-x { font-size: 60px; color: #ff0000; font-weight: 900; display: none; } /* X KUBWA */
+    .elimination-x { font-size: 80px; color: #000; font-weight: 900; display: none; position: absolute; } /* X KUBWA WEUSI */
 
     .player-card.waiting { border-color: #333; color: #444; }
     .player-card.active-sync { /* Wakati inahesabu */
         border-color: #00ffff; box-shadow: 0 0 30px #00ffff; 
         background: #001111; color: #00ffff; transform: scale(1.1);
     }
-    .player-card.in-game { /* Ikiisha sync - BOX ZIMA JEKUNDU */
-        border-color: #ff0000; box-shadow: 0 0 30px #ff0000; 
-        background: #330000; color: #ff0000;
+    .player-card.in-game { /* Ikiisha sync - BOX ZIMA JEKUNDU LA DAMU */
+        border-color: #ff0000; box-shadow: 0 0 40px #ff0000; 
+        background: #ff0000; color: #ff0000;
     }
-    .player-card.eliminated { /* Ikiuliwa - BADO JEKUNDU NA X */
-        border-color: #ff0000; box-shadow: 0 0 15px #550000; 
-        background: #220000; color: #550000;
+    .player-card.in-game .player-avatar { color: #fff; } /* AVATAR IWE NYEUPE */
+    .player-card.in-game .player-name, 
+    .player-card.in-game .player-status { display: none; } /* FICHA MAANDISHI */
+    
+    .player-card.eliminated { /* Ikiuliwa - BADO JEKUNDU NA X WEUSI */
+        border-color: #ff0000; box-shadow: 0 0 20px #ff0000; 
+        background: #ff0000; 
     }
     .player-card.eliminated .player-avatar, 
     .player-card.eliminated .player-name,
@@ -61,10 +65,10 @@
     
     .player-card.winner { /* MSHINDI */
         border-color: #ffd700; box-shadow: 0 0 40px #ffd700; 
-        background: #332200; color: #ffd700; transform: scale(1.15);
+        background: #ffd700; color: #000; transform: scale(1.15);
         animation: blink 1s infinite;
     }
-    .sync-timer { position: absolute; bottom: 10px; font-size: 12px; color: yellow; }
+    .player-card.winner .player-avatar { color: #000; }
 
     #timer-msg { color: #ffff00; font-size: 22px; margin: 20px 0; min-height: 30px; letter-spacing: 1px; }
     
@@ -183,9 +187,9 @@ function startOfficialEngine() {
 
         if (secondsLeft < 0) {
             document.getElementById('p' + activePlayer).classList.remove('active-sync');
-            document.getElementById('p' + activePlayer).classList.add('in-game'); // BOX ZIMA LINAWAKA JEKUNDU
-            document.getElementById('p' + activePlayer + '-title').innerText = ""; // JINA LINAPOTEA
-            document.getElementById('t' + activePlayer).innerText = "IN GAME";
+            document.getElementById('p' + activePlayer).classList.add('in-game'); // BOX ZIMA LINAJAA JEKUNDU
+            document.getElementById('p' + activePlayer + '-title').innerText = ""; 
+            document.getElementById('t' + activePlayer).innerText = ""; // FICHA MAANDISHI YOTE
 
             activePlayer++;
             secondsLeft = 15;
@@ -233,8 +237,8 @@ function startAutoElimination() {
 function eliminatePlayer(playerIndex) {
     const playerEl = document.getElementById('p' + playerIndex);
     playerEl.classList.remove('in-game');
-    playerEl.classList.add('eliminated'); // SASA INAONYESHA X KUBWA
-    document.getElementById('t' + playerIndex).innerText = "ELIMINATED";
+    playerEl.classList.add('eliminated'); // INABAKI JEKUNDU NA X
+    document.getElementById('t' + playerIndex).innerText = "";
     document.getElementById('timer-msg').innerText = `ELIMINATED: ${playersData[playerIndex-1].toUpperCase()}`;
 }
 
@@ -242,8 +246,8 @@ function declareWinners() {
     document.getElementById('timer-msg').innerText = "GAME OVER. WINNERS IDENTIFIED.";
     WINNERS.forEach(winnerIndex => {
         document.getElementById('p' + winnerIndex).classList.remove('in-game');
-        document.getElementById('p' + winnerIndex).classList.add('winner'); // BOX ZIMA LINAWAKA DHABU
-        document.getElementById('p' + winnerIndex + '-title').innerText = playersData[winnerIndex-1].toUpperCase(); // JINA LINARUDI
+        document.getElementById('p' + winnerIndex).classList.add('winner'); // BOX ZIMA LINAJAA DHABU
+        document.getElementById('p' + winnerIndex + '-title').innerText = playersData[winnerIndex-1].toUpperCase(); 
         document.getElementById('t' + winnerIndex).innerText = "WINNER";
     });
 }
