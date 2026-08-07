@@ -33,20 +33,20 @@
         display: flex; flex-direction: column; align-items: center; justify-content: center;
         position: relative; color: #ff0000; transition: 0.5s;
     }
-   .player-avatar { font-size: 50px; }
-   .player-name { font-size: 14px; margin-top: 5px; }
-   .player-status { font-size: 12px; margin-top: 5px; }
-   .final-mark { font-size: 100px; color: #000; font-weight: 900; display: none; position: absolute; }
-   .final-text { font-size: 18px; font-weight: 900; display: none; position: absolute; bottom: 10px; }
+   .player-avatar { font-size: 50px; z-index: 2; }
+   .player-name { font-size: 14px; z-index: 2; }
+   .player-status { font-size: 12px; z-index: 2; }
+   .final-mark { font-size: 100px; color: #000; font-weight: 900; display: none; position: absolute; z-index: 3; }
+   .final-text { font-size: 18px; font-weight: 900; display: none; position: absolute; bottom: 10px; z-index: 3; }
 
    .active-sync { border-color: #00ffff!important; background: #002222!important; color: #00ffff!important; animation: pulse 1s infinite; }
    .active-sync .player-avatar { color: #00ffff!important; }
 
    .in-game { background: #ff0000!important; animation: pulse 1s infinite; transform: scale(1.05); }
-   .in-game .player-avatar, .in-game .player-name, .in-game .player-status { display: none; } /* FICHA ICON + JINA + SEKUNDE */
+   .in-game * { display: none!important; } /* HAPA NDO SIRI: KILA KITU KINAFICHWA */
     
    .eliminated { background: #4d0000!important; border-color: #4d0000!important; }
-   .eliminated .player-avatar, .eliminated .player-name, .eliminated .player-status { display: none; }
+   .eliminated * { display: none!important; }
 
    .winner-final { background: #ffd700!important; border-color: #ffd700!important; animation: blink 0.8s infinite; }
    .winner-final .final-mark { display: block; color: #000; }
@@ -133,7 +133,7 @@ function startEngine() {
         secondsLeft--;
         if (secondsLeft < 0) {
             document.getElementById('p' + activePlayer).classList.remove('active-sync');
-            document.getElementById('p' + activePlayer).classList.add('in-game'); // HAPA INAFICHA ICON + JINA + SEKUNDE ZOTE
+            document.getElementById('p' + activePlayer).classList.add('in-game'); // HAPA KILA KITU KINAPOTEA
             activePlayer++;
             secondsLeft = 15;
             if (activePlayer > 7) { clearInterval(engineInterval); showGameStarted(); }
@@ -166,10 +166,10 @@ function finalResult() {
     for(let i=1; i<=7; i++) {
         if(WINNERS.includes(i)) {
             document.getElementById('p' + i).classList.remove('in-game', 'eliminated');
-            document.getElementById('p' + i).classList.add('winner-final'); // 2 WASHINDI
+            document.getElementById('p' + i).classList.add('winner-final'); // 2 WASHINDI = DHAHABU + WINNER
         } else {
             document.getElementById('p' + i).classList.remove('in-game', 'eliminated');
-            document.getElementById('p' + i).classList.add('loser-final'); // 5 WALIOKUFA
+            document.getElementById('p' + i).classList.add('loser-final'); // 5 WALIOKUFA = NYEKUNDU YA GIZA + ❌️
         }
     }
 }
