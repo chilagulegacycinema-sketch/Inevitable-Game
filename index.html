@@ -17,6 +17,7 @@
     #warning p { color: #fff; font-size: 20px; margin-top: 20px; max-width: 700px; line-height: 1.5; }
     @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
     @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+    @keyframes bloodPulse { 0% {box-shadow: 0 0 20px #ff0000;} 50% {box-shadow: 0 0 60px #ff0000;} 100% {box-shadow: 0 0 20px #ff0000;} }
 
     h1.main-title { color: #ff0000; font-size: 38px; margin: 20px 0; text-shadow: 0 0 15px red; letter-spacing: 3px;}
     h2 { margin-bottom: 20px; color: #ccc; font-size: 16px; }
@@ -34,38 +35,42 @@
         background: #0a0a0a; border: 2px solid #222; padding: 15px;
         transition: 0.5s; border-radius: 12px; min-height: 160px;
         display: flex; flex-direction: column; align-items: center; justify-content: center;
-        font-size: 14px; position: relative;
+        font-size: 14px; position: relative; overflow: hidden; /* MUHIMU KWA DAMU */
     }
-    .player-avatar { font-size: 45px; margin-bottom: 8px; transition: 0.3s; }
-    .player-name { font-size: 14px; }
-    .player-status { font-size: 12px; margin-top: 5px; }
-    .elimination-x { font-size: 80px; color: #000; font-weight: 900; display: none; position: absolute; } /* X KUBWA WEUSI */
+    .player-avatar { font-size: 45px; margin-bottom: 8px; transition: 0.3s; z-index: 2; }
+    .player-name { font-size: 14px; z-index: 2; }
+    .player-status { font-size: 12px; margin-top: 5px; z-index: 2; }
+    .elimination-x { font-size: 90px; color: #000; font-weight: 900; display: none; position: absolute; z-index: 3; text-shadow: 0 0 10px #ff0000; } /* X KUBWA */
 
     .player-card.waiting { border-color: #333; color: #444; }
     .player-card.active-sync { /* Wakati inahesabu */
         border-color: #00ffff; box-shadow: 0 0 30px #00ffff; 
         background: #001111; color: #00ffff; transform: scale(1.1);
     }
-    .player-card.in-game { /* Ikiisha sync - BOX ZIMA JEKUNDU LA DAMU */
-        border-color: #ff0000; box-shadow: 0 0 40px #ff0000; 
-        background: #ff0000; color: #ff0000;
+    .player-card.in-game { /* Ikiisha sync - BOX ZIMA LA DAMU */
+        border-color: #ff0000; 
+        background: linear-gradient(135deg, #8b0000, #ff0000, #8b0000); /* GRADIENT YA DAMU */
+        animation: bloodPulse 1s infinite; /* INAPULIZA */
+        transform: scale(1.05);
     }
-    .player-card.in-game .player-avatar { color: #fff; } /* AVATAR IWE NYEUPE */
+    .player-card.in-game .player-avatar { color: #fff; filter: drop-shadow(0 0 5px #fff); } /* AVATAR NYEUPE */
     .player-card.in-game .player-name, 
     .player-card.in-game .player-status { display: none; } /* FICHA MAANDISHI */
     
-    .player-card.eliminated { /* Ikiuliwa - BADO JEKUNDU NA X WEUSI */
-        border-color: #ff0000; box-shadow: 0 0 20px #ff0000; 
-        background: #ff0000; 
+    .player-card.eliminated { /* Ikiuliwa - BADO DAMU NA X */
+        border-color: #550000; 
+        background: #220000; /* DAMU ILIYOKAUKA */
+        animation: none;
     }
     .player-card.eliminated .player-avatar, 
     .player-card.eliminated .player-name,
-    .player-card.eliminated .player-status { display: none; } /* FICHA VINGINE */
-    .player-card.eliminated .elimination-x { display: block; } /* ONYESHA X */
+    .player-card.eliminated .player-status { display: none; }
+    .player-card.eliminated .elimination-x { display: block; }
     
     .player-card.winner { /* MSHINDI */
         border-color: #ffd700; box-shadow: 0 0 40px #ffd700; 
-        background: #ffd700; color: #000; transform: scale(1.15);
+        background: linear-gradient(135deg, #332200, #ffd700, #332200); 
+        color: #000; transform: scale(1.15);
         animation: blink 1s infinite;
     }
     .player-card.winner .player-avatar { color: #000; }
@@ -187,9 +192,9 @@ function startOfficialEngine() {
 
         if (secondsLeft < 0) {
             document.getElementById('p' + activePlayer).classList.remove('active-sync');
-            document.getElementById('p' + activePlayer).classList.add('in-game'); // BOX ZIMA LINAJAA JEKUNDU
+            document.getElementById('p' + activePlayer).classList.add('in-game'); // BOX ZIMA LA DAMU
             document.getElementById('p' + activePlayer + '-title').innerText = ""; 
-            document.getElementById('t' + activePlayer).innerText = ""; // FICHA MAANDISHI YOTE
+            document.getElementById('t' + activePlayer).innerText = "";
 
             activePlayer++;
             secondsLeft = 15;
@@ -237,7 +242,7 @@ function startAutoElimination() {
 function eliminatePlayer(playerIndex) {
     const playerEl = document.getElementById('p' + playerIndex);
     playerEl.classList.remove('in-game');
-    playerEl.classList.add('eliminated'); // INABAKI JEKUNDU NA X
+    playerEl.classList.add('eliminated'); // INAGEUKA DAMU ILIYOKAUKA
     document.getElementById('t' + playerIndex).innerText = "";
     document.getElementById('timer-msg').innerText = `ELIMINATED: ${playersData[playerIndex-1].toUpperCase()}`;
 }
@@ -246,7 +251,7 @@ function declareWinners() {
     document.getElementById('timer-msg').innerText = "GAME OVER. WINNERS IDENTIFIED.";
     WINNERS.forEach(winnerIndex => {
         document.getElementById('p' + winnerIndex).classList.remove('in-game');
-        document.getElementById('p' + winnerIndex).classList.add('winner'); // BOX ZIMA LINAJAA DHABU
+        document.getElementById('p' + winnerIndex).classList.add('winner'); 
         document.getElementById('p' + winnerIndex + '-title').innerText = playersData[winnerIndex-1].toUpperCase(); 
         document.getElementById('t' + winnerIndex).innerText = "WINNER";
     });
