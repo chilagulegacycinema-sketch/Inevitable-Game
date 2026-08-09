@@ -30,9 +30,9 @@
 .book { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; }
 .author-header { display: flex; align-items: center; gap: 8px; padding: 10px 15px; background: #111; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 1000; }
 .author-header img { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--pink-neon); }
-.author-header.name { font-family: Orbitron; font-size: 11px; color: var(--pink-neon); font-weight: 700; display:flex; align-items:center; gap:4px; }
-.verify-badge { width: 16px; height: 16px; background: var(--verify); border-radius: 50%; display: inline-flex; justify-content:center; align-items:center; box-shadow: 0 0 8px var(--verify); flex-shrink:0; }
-.verify-badge svg { width: 10px; height: 10px; fill: #fff; }
+.author-header.name { font-family: Orbitron; font-size: 11px; color: var(--pink-neon); font-weight: 700; display:flex; align-items:center; gap:5px; }
+.verify-badge { width: 18px; height: 18px; background: var(--verify); border-radius: 50%; display: inline-flex; justify-content:center; align-items:center; box-shadow: 0 0 10px var(--verify), 0 0 20px var(--verify); border: 2px solid #fff; }
+.verify-badge svg { width: 11px; height: 11px; fill: #fff; }
 .page { width: 100%; height: 100%; position: absolute; background: var(--read-bg); color: var(--read-text); border: none; border-radius: 0; box-shadow: none; padding: 0; overflow-y: auto; transform-origin: left; transition: transform 0.8s ease; background-image: none; }
 .page-content { padding: 20px 25px 30px 25px; }
 .page h2 { font-family: 'Dancing Script', cursive; font-size: 26px; color: var(--pink-neon); text-align: center; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px; }
@@ -48,11 +48,12 @@
 .profile-page { display: none; flex-direction: column; height: 100%; width: 100%; background: #000; }
 .profile-header { padding: 15px; text-align: center; border-bottom: 1px solid var(--border); }
 .profile-header img { width: 70px; height: 70px; border-radius: 50%; border: 2px solid var(--pink-neon); }
-.profile-header.name-wrap { display:flex; justify-content:center; align-items:center; gap:6px; margin-top:5px; }
-.profile-header h2 { color:var(--pink-neon); font-family:Dancing Script; font-size:22px; }
-.verify-badge-lg { width: 24px; height: 24px; background: var(--verify); border-radius: 50%; display: inline-flex; justify-content:center; align-items:center; box-shadow: 0 0 12px var(--verify); flex-shrink:0; }
-.verify-badge-lg svg { width: 15px; height: 15px; fill: #fff; }
-.verify-text { font-size:10px; color:var(--verify); font-family:Orbitron; font-weight:900; letter-spacing:1px; }
+.profile-header.name-wrap { display:flex; justify-content:center; align-items:center; gap:8px; margin-top:8px; flex-wrap:wrap; }
+.profile-header h2 { color:var(--pink-neon); font-family:Dancing Script; font-size:24px; }
+.verify-badge-lg { width: 32px; height: 32px; background: var(--verify); border-radius: 50%; display: inline-flex; justify-content:center; align-items:center; box-shadow: 0 0 15px var(--verify), 0 0 30px var(--verify); border: 3px solid #fff; animation: pulse 2s infinite; }
+.verify-badge-lg svg { width: 20px; height: 20px; fill: #fff; }
+.verify-text { font-size:12px; color:#fff; background:var(--verify); padding:3px 8px; border-radius:6px; font-family:Orbitron; font-weight:900; letter-spacing:1px; box-shadow: 0 0 10px var(--verify); }
+@keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.1)} }
 .admin-tabs { display: flex; gap: 5px; padding: 8px; background: #05050A; }
 .tab-btn { display: flex; align-items: center; justify-content: center; gap: 4px; flex: 1; padding: 6px; font-size: 9px; border: 1px solid var(--pink-neon); background: transparent; color: var(--pink-neon); border-radius: 8px; cursor: pointer; font-family: Orbitron; }
 .tab-btn.active { background: var(--pink-neon); color: #000; }
@@ -158,7 +159,7 @@
     function loginAdmin() {
         let name = document.getElementById('adminName').value.trim();
         let pfp = document.getElementById('adminPfp').value.trim();
-        let pass = document.getElementById('adminPassInput').value.trim();
+        let pass = document.getId('adminPassInput').value.trim();
         if(pass!== correctAdminPass) { alert("Password sio sahihi"); return; }
         if(!name ||!pfp) { alert("Jaza jina na picha"); return; }
         currentUser = name; currentPfp = pfp; isAdmin = true;
