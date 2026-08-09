@@ -1,2 +1,2 @@
-# Inevitable-Game
-"Mfumo mkuu wa mchezo wa Inevitable unaounganisha maisha ya wachezaji wa ndani na nje ya game kwa ajili ya filamu."
+# HeartTales 
+"Kitabu Cha hadithi za moyo Zenye kuelezea maisha ya mahusiano na Maisha ya kila siku Karibu."
