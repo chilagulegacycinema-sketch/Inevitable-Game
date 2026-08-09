@@ -68,11 +68,8 @@
 .book-cover:hover { background: #333; }
 .book-item-admin { background:#222; padding:10px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
 .empty-state { color:#888; text-align:center; padding-top:50px; font-size:14px; }
-
-/* BACK BUTTON MWISHO WA PAGE */
-.back-footer { text-align:center; padding:25px 0; }
-.back-btn { background: linear-gradient(90deg, var(--pink-neon), var(--purple-neon)); color: #000; border: none; padding: 14px 32px; border-radius: 10px; font-weight: 900; cursor: pointer; font-family: 'Orbitron'; font-size:14px; letter-spacing:2px; box-shadow: 0 0 15px var(--pink-neon); }
-.back-btn:hover { box-shadow: 0 0 25px var(--pink-neon); }
+.back-story-btn { display:none; position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background: linear-gradient(90deg, var(--pink-neon), var(--purple-neon)); color: #000; border: none; padding: 12px 24px; border-radius: 10px; font-weight: 900; cursor: pointer; font-family: 'Orbitron'; font-size:12px; letter-spacing:2px; box-shadow: 0 0 20px var(--pink-neon); z-index:9999; animation: fadeIn 0.5s; }
+@keyframes fadeIn { from{opacity:0; bottom:10px} to{opacity:1; bottom:20px} }
 </style>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
@@ -86,19 +83,16 @@
         </div>
         <div class="live-status"><div class="live-dot"></div><span id="liveCount">0 ONLINE</span></div>
     </div>
-
     <div class="category-bar" id="categoryBar">
         <button class="category-btn active" id="btnAll" onclick="loadBook('all')"><svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2.9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"/></svg> ZOTE</button>
         <button class="category-btn" id="btnLove" onclick="loadBook('Love')"><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg> LOVE</button>
         <button class="category-btn" id="btnInspo" onclick="loadBook('Inspiration')"><svg viewBox="0 0 24 24"><path d="M9 21c0.55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0.55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg> INSPO</button>
     </div>
-
     <div id="bookView" class="book-container">
         <div class="book" id="book">
             <p class="empty-state">Inapakia vitabu...</p>
         </div>
     </div>
-
     <div id="adminLogin" class="admin-login">
         <img src="https://i.postimg.cc/vZsmk4BF/file-00000805881f4b4bebbc524a36936.png">
         <h2 style="color:var(--pink-neon); font-family: Dancing Script;">ADMIN LOGIN</h2>
@@ -108,7 +102,6 @@
         <button onclick="loginAdmin()"><svg class="icon" viewBox="0 0 24 24"><path d="M11 7L9.6 8.4l2.6 2.6H2v2h10.2l-2.6 2.6L11 17l5-5-5-5zM20 19h-8v2h8c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-8v2h8v14z"/></svg> INGIA</button>
         <button onclick="backToBook()" style="background:#555;"><svg class="icon" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg> RUDI</button>
     </div>
-
     <div id="profilePage" class="profile-page">
         <div class="profile-header">
             <button class="post-btn" onclick="backToBook()" style="background:#555; margin-bottom:10px; width:100%;"><svg class="icon" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg> RUDI KWENYE VITABU</button>
@@ -142,31 +135,21 @@
             <button class="post-btn" onclick="logout()" style="background:#FF0040;"><svg class="icon" viewBox="0 0 24 24"><path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2.9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg> TOKA ADMIN</button>
         </div>
     </div>
-
-    <!-- BACK BUTTON MWISHO WA PAGE -->
-    <div class="back-footer">
-        <button class="back-btn" onclick="window.history.back()">BACK</button>
-    </div>
-
+    <button class="back-story-btn" id="backStoryBtn" onclick="backToBook()">BACK TO BOOKS</button>
 </div>
-
 <script>
     const firebaseConfig = { databaseURL: "https://chilx-live-4432d-default-rtdb.firebaseio.com/" };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
-
-    let currentUser = ""; let currentPfp = ""; let isAdmin = false; let clickCount = 0; let correctAdminPass = "ystar123"; let currentBookPages = []; let currentPageIndex = 0;
+    let currentUser = ""; let currentPfp = ""; let isAdmin = false; let clickCount = 0; let correctAdminPass = "ystar123"; let currentBookPages = []; let currentPageIndex = 0; let pagesFlipped = 0;
     let userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-
     function setupOnlineStatus() {
         let userRef = db.ref("hearttales_online/" + userId);
         let connectedRef = db.ref(".info/connected");
         connectedRef.on("value", (snap) => { if (snap.val() === true) { userRef.set(true); userRef.onDisconnect().remove(); } });
         db.ref("hearttales_online").on("value", (snap) => { document.getElementById('liveCount').innerText = snap.numChildren() + " ONLINE"; });
     }
-
     document.getElementById('logoClick').addEventListener('click', () => { clickCount++; if(clickCount >= 5) { clickCount = 0; document.getElementById('bookView').style.display = 'none'; document.getElementById('adminLogin').style.display = 'flex'; } });
-
     function loginAdmin() {
         let name = document.getElementById('adminName').value.trim();
         let pfp = document.getElementById('adminPfp').value.trim();
@@ -181,6 +164,7 @@
         document.getElementById('adminLogin').style.display = 'none';
         document.getElementById('profilePage').style.display = 'flex';
         document.getElementById('categoryBar').style.display = 'none';
+        document.getElementById('backStoryBtn').style.display = 'none';
         document.getElementById('profilePagePfp').src = currentPfp;
         document.getElementById('profilePageName').innerHTML = currentUser;
         document.getElementById('newAdminName').value = currentUser;
@@ -188,6 +172,8 @@
         loadMyBooks();
     }
     function backToBook() {
+        document.getElementById('backStoryBtn').style.display = 'none';
+        pagesFlipped = 0;
         document.getElementById('adminLogin').style.display = 'none';
         document.getElementById('profilePage').style.display = 'none';
         document.getElementById('bookView').style.display = 'flex';
@@ -202,7 +188,6 @@
         if(tabId === 'manageTab') loadMyBooks();
     }
     function logout() { db.ref("hearttales_online/" + userId).remove(); localStorage.clear(); location.reload(); }
-
     function publishBook() {
         let pages = document.getElementById('bookContent').value.split('[PAGE]');
         if(!document.getElementById('bookTitle').value || pages[0] === "") { alert("Jaza Jina na Content"); return; }
@@ -213,36 +198,30 @@
             loadBook('all'); loadMyBooks();
         });
     }
-
     function setActiveCategory(category) {
         document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
         if(category === 'all') document.getElementById('btnAll').classList.add('active');
         if(category === 'Love') document.getElementById('btnLove').classList.add('active');
         if(category === 'Inspiration') document.getElementById('btnInspo').classList.add('active');
     }
-
     function loadBook(category) {
         setActiveCategory(category);
         document.getElementById('book').innerHTML = "<p class='empty-state'>Inapakia vitabu...</p>";
-
         let query;
         if(category === 'all') {
             query = db.ref("hearttales_books").orderByChild("timestamp").limitToLast(50);
         } else {
             query = db.ref("hearttales_books").orderByChild("category").equalTo(category).limitToLast(50);
         }
-
         query.once("value", snap => {
             document.getElementById('book').innerHTML = "";
             if(!snap.exists()) {
                 document.getElementById('book').innerHTML = "<p class='empty-state'>Hakuna vitabu bado hapa.</p>";
                 return;
             }
-
             let booksArray = [];
             snap.forEach(child => { booksArray.push({id: child.key,...child.val()}); });
             booksArray.reverse();
-
             booksArray.forEach(bookData => {
                 let div = document.createElement('div');
                 div.className = 'book-cover';
@@ -252,16 +231,16 @@
             });
         });
     }
-
     function renderBook(bookData) {
         document.getElementById('book').innerHTML = "";
+        document.getElementById('backStoryBtn').style.display = 'none';
+        pagesFlipped = 0;
         currentBookPages = bookData.pages;
         currentBookPages.forEach((pageContent, index) => {
             let pageDiv = document.createElement('div');
             pageDiv.className = 'page';
             pageDiv.id = 'page-' + index;
             if(index > 0) pageDiv.style.zIndex = 100 - index;
-
             let authorHeader = `
                 <div class="author-header">
                     <img src="${bookData.authorPfp}">
@@ -270,7 +249,6 @@
                     </span>
                 </div>
             `;
-
             if(index === 0 && bookData.cover) {
                 pageDiv.innerHTML = `
                     ${authorHeader}
@@ -294,18 +272,24 @@
             document.getElementById('book').appendChild(pageDiv);
         });
     }
-
     function flipPage(index) {
         let page = document.getElementById('page-' + index);
         if(page &&!page.classList.contains('flipped')) {
             page.classList.add('flipped');
             page.style.zIndex = 200 + index;
+            pagesFlipped++;
+            if(pagesFlipped >= 1) {
+                document.getElementById('backStoryBtn').style.display = 'block';
+            }
         } else if(page) {
             page.classList.remove('flipped');
             page.style.zIndex = 100 - index;
+            pagesFlipped--;
+            if(pagesFlipped < 1) {
+                document.getElementById('backStoryBtn').style.display = 'none';
+            }
         }
     }
-
     function loadMyBooks() {
         document.getElementById('myBooksList').innerHTML = "Inapakia...";
         db.ref("hearttales_books").orderByChild("author").equalTo(currentUser).once("value", snap => {
@@ -333,7 +317,6 @@
         }
     }
     function updateAdminInfo() { alert("Imehifadhiwa"); }
-
     setupOnlineStatus();
     loadBook('all');
 </script>
