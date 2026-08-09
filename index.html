@@ -236,11 +236,12 @@
         document.getElementById('backStoryBtn').style.display = 'none';
         pagesFlipped = 0;
         currentBookPages = bookData.pages;
+        let totalPages = currentBookPages.length;
         currentBookPages.forEach((pageContent, index) => {
             let pageDiv = document.createElement('div');
             pageDiv.className = 'page';
             pageDiv.id = 'page-' + index;
-            if(index > 0) pageDiv.style.zIndex = 100 - index;
+            pageDiv.style.zIndex = totalPages - index;
             let authorHeader = `
                 <div class="author-header">
                     <img src="${bookData.authorPfp}">
@@ -264,7 +265,7 @@
                     <div class="page-content">
                         <h2>${bookData.title}</h2>
                         <p>${pageContent}</p>
-                        <div class="page-num">Page ${index + 1} / ${currentBookPages.length}</div>
+                        <div class="page-num">Page ${index + 1} / ${totalPages}</div>
                     </div>
                 `;
             }
@@ -283,7 +284,7 @@
             }
         } else if(page) {
             page.classList.remove('flipped');
-            page.style.zIndex = 100 - index;
+            page.style.zIndex = currentBookPages.length - index;
             pagesFlipped--;
             if(pagesFlipped < 1) {
                 document.getElementById('backStoryBtn').style.display = 'none';
